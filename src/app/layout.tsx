@@ -39,7 +39,7 @@ export default function RootLayout({
             </div>
           </div>
         </nav>
-        <main className="mx-auto max-w-2xl px-4 py-6">{children}</main>
+        <main className="mx-auto px-4 py-6">{children}</main>
       </body>
     </html>
   );

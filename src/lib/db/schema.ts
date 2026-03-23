@@ -12,6 +12,7 @@ export const posts = sqliteTable("posts", {
   submittedByAlias: text("submitted_by_alias"),
   sourceTitle: text("source_title"),
   sourceAuthor: text("source_author"),
+  sourceDescription: text("source_description"),
   sourceThumbnailUrl: text("source_thumbnail_url"),
   embedKind: text("embed_kind").notNull(), // iframe_url | html | unsupported
   embedUrl: text("embed_url"),

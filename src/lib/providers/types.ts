@@ -1,6 +1,6 @@
-export type Provider = "youtube" | "tiktok" | "instagram";
+export type Provider = "youtube" | "tiktok" | "instagram" | "generic";
 
-export type ContentType = "video" | "short" | "reel" | "post";
+export type ContentType = "video" | "short" | "reel" | "post" | "article";
 
 export type EmbedKind = "iframe_url" | "html" | "unsupported";
 
@@ -14,6 +14,7 @@ export interface MetadataResult {
   title?: string;
   author?: string;
   thumbnailUrl?: string;
+  description?: string;
 }
 
 export interface ProviderMatch {
@@ -27,5 +28,5 @@ export interface ProviderMatch {
 export interface ProviderModule {
   provider: Provider;
   match(url: string): ProviderMatch | null;
-  fetchMetadata?(externalId: string): Promise<MetadataResult>;
+  fetchMetadata?(externalId: string, url?: string): Promise<MetadataResult>;
 }

@@ -13,15 +13,15 @@ export async function POST(req: Request) {
     const match = detectProvider(input.url);
     if (!match) {
       return NextResponse.json(
-        { error: "Unsupported URL. We support YouTube, TikTok, and Instagram links." },
+        { error: "Invalid URL format" },
         { status: 400 }
       );
     }
 
-    // Fetch metadata if available
+    // Fetch metadata — pass url for generic provider
     const mod = getProviderModule(match.provider);
     const metadata = mod?.fetchMetadata
-      ? await mod.fetchMetadata(match.externalId)
+      ? await mod.fetchMetadata(match.externalId, input.url)
       : {};
 
     const [post] = await db
@@ -37,6 +37,7 @@ export async function POST(req: Request) {
         submittedByAlias: input.submittedByAlias || null,
         sourceTitle: metadata?.title || null,
         sourceAuthor: metadata?.author || null,
+        sourceDescription: metadata?.description || null,
         sourceThumbnailUrl: metadata?.thumbnailUrl || null,
         embedKind: match.embed.kind,
         embedUrl: match.embed.url || null,

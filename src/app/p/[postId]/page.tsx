@@ -6,6 +6,7 @@ import { eq, asc } from "drizzle-orm";
 import { PostMeta } from "@/components/post-meta";
 import { ProviderEmbed } from "@/components/provider-embed";
 import { ReactionBar } from "@/components/reaction-bar";
+import { LikeDislikeBar } from "@/components/like-dislike-bar";
 import { CommentList } from "@/components/comment-list";
 import { CommentForm } from "@/components/comment-form";
 import { relativeTime } from "@/lib/utils/dates";
@@ -33,7 +34,7 @@ export default async function PostDetailPage({
   const title = post.localTitle || post.sourceTitle;
 
   return (
-    <div className="space-y-6 py-4">
+    <div className="mx-auto max-w-2xl space-y-6 py-4">
       {/* Back link */}
       <Link
         href="/"
@@ -58,11 +59,6 @@ export default async function PostDetailPage({
             {post.localNote}
           </p>
         )}
-        {post.submittedByAlias && (
-          <p className="mt-1 text-xs text-gray-600">
-            submitted by {post.submittedByAlias}
-          </p>
-        )}
       </div>
 
       {/* Embed */}
@@ -77,6 +73,11 @@ export default async function PostDetailPage({
       >
         Open original ↗
       </a>
+
+      {/* Like/Dislike ratio */}
+      {(post.likeCount > 0 || post.dislikeCount > 0) && (
+        <LikeDislikeBar likes={post.likeCount} dislikes={post.dislikeCount} />
+      )}
 
       {/* Reactions */}
       <ReactionBar

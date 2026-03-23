@@ -8,6 +8,7 @@ interface ReactionBarProps {
   likeCount: number;
   dislikeCount: number;
   reactionCountsJson: string;
+  compact?: boolean;
 }
 
 const EMOJI_REACTIONS = [
@@ -23,6 +24,7 @@ export function ReactionBar({
   likeCount: initialLikes,
   dislikeCount: initialDislikes,
   reactionCountsJson,
+  compact = false,
 }: ReactionBarProps) {
   const initialCounts = (() => {
     try {
@@ -71,13 +73,17 @@ export function ReactionBar({
     }
   };
 
+  const btnBase = compact
+    ? "inline-flex items-center gap-0.5 rounded-md border px-1.5 py-0.5 text-[10px] transition-all hover:border-gray-700 hover:bg-gray-800/60"
+    : "inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs transition-all hover:border-gray-700 hover:bg-gray-800/60";
+
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
+    <div className="flex flex-wrap items-center gap-1">
       {/* Like / Dislike */}
       <button
         onClick={() => react("like")}
         disabled={pending !== null}
-        className={`inline-flex items-center gap-1 rounded-lg border border-gray-800 px-2.5 py-1 text-xs transition-all hover:border-gray-700 hover:bg-gray-800/60 ${pending === "like" ? "opacity-50" : ""}`}
+        className={`${btnBase} border-gray-800 ${pending === "like" ? "opacity-50" : ""}`}
       >
         <span>👍</span>
         {likes > 0 && <span className="text-gray-400">{likes}</span>}
@@ -85,7 +91,7 @@ export function ReactionBar({
       <button
         onClick={() => react("dislike")}
         disabled={pending !== null}
-        className={`inline-flex items-center gap-1 rounded-lg border border-gray-800 px-2.5 py-1 text-xs transition-all hover:border-gray-700 hover:bg-gray-800/60 ${pending === "dislike" ? "opacity-50" : ""}`}
+        className={`${btnBase} border-gray-800 ${pending === "dislike" ? "opacity-50" : ""}`}
       >
         <span>👎</span>
         {dislikes > 0 && <span className="text-gray-400">{dislikes}</span>}
@@ -99,7 +105,7 @@ export function ReactionBar({
             key={key}
             onClick={() => react(key)}
             disabled={pending !== null}
-            className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs transition-all hover:border-gray-700 hover:bg-gray-800/60 ${
+            className={`${btnBase} ${
               count > 0
                 ? "border-gray-700 bg-gray-800/40"
                 : "border-gray-800"

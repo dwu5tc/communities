@@ -4,6 +4,7 @@ import { relativeTime } from "@/lib/utils/dates";
 import { PostMeta } from "./post-meta";
 import { ProviderEmbed } from "./provider-embed";
 import { ReactionBar } from "./reaction-bar";
+import { LikeDislikeBar } from "./like-dislike-bar";
 
 interface FeedCardProps {
   post: Post;
@@ -42,7 +43,12 @@ export function FeedCard({ post, previewComments }: FeedCardProps) {
         <ProviderEmbed post={post} lazy />
       </div>
 
-      {/* Reactions */}
+      {/* Like/Dislike ratio + Reactions */}
+      {(post.likeCount > 0 || post.dislikeCount > 0) && (
+        <div className="px-4 pt-2">
+          <LikeDislikeBar likes={post.likeCount} dislikes={post.dislikeCount} />
+        </div>
+      )}
       <div className="px-4 py-2">
         <ReactionBar
           targetType="post"

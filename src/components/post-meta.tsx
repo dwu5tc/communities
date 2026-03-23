@@ -25,6 +25,13 @@ const PROVIDER_BADGE: Record<
     border: "border-fuchsia-500/20",
     icon: "◆",
   },
+  generic: {
+    label: "Link",
+    color: "text-amber-400",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/20",
+    icon: "◎",
+  },
 };
 
 export function PostMeta({ post }: { post: Post }) {
@@ -37,7 +44,7 @@ export function PostMeta({ post }: { post: Post }) {
   };
 
   return (
-    <div className="flex items-center gap-2 text-xs">
+    <div className="flex flex-wrap items-center gap-2 text-xs">
       <span
         className={`inline-flex items-center gap-1 rounded-md border ${badge.border} ${badge.bg} px-2 py-0.5 font-medium ${badge.color}`}
       >
@@ -49,6 +56,14 @@ export function PostMeta({ post }: { post: Post }) {
         <>
           <span className="text-gray-700">·</span>
           <span className="text-gray-500">{post.sourceAuthor}</span>
+        </>
+      )}
+      {post.submittedByAlias && (
+        <>
+          <span className="text-gray-700">·</span>
+          <span className="text-gray-600">
+            posted by <span className="text-gray-400">{post.submittedByAlias}</span>
+          </span>
         </>
       )}
     </div>

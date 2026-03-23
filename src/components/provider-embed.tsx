@@ -88,33 +88,43 @@ export function ProviderEmbed({ post, lazy = true }: ProviderEmbedProps) {
     return () => clearTimeout(timer);
   }, [hydrated, post.embedKind]);
 
-  // Unsupported or timed out — show fallback
+  // Unsupported or timed out — show link card
   if (post.embedKind === "unsupported" || (!post.isEmbeddable) || timedOut) {
+    const hostname = (() => {
+      try { return new URL(post.canonicalUrl).hostname.replace("www.", ""); } catch { return ""; }
+    })();
+
     return (
       <a
         href={post.canonicalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-3 rounded-xl border border-gray-800 bg-gray-900/50 p-4 transition-colors hover:border-gray-700 hover:bg-gray-900"
+        className="group block overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 transition-colors hover:border-gray-700 hover:bg-gray-900"
       >
         {post.sourceThumbnailUrl && (
-          <img
-            src={post.sourceThumbnailUrl}
-            alt=""
-            className="h-14 w-20 flex-shrink-0 rounded-lg object-cover"
-          />
+          <div className="relative aspect-[2/1] w-full overflow-hidden bg-gray-800">
+            <img
+              src={post.sourceThumbnailUrl}
+              alt=""
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            />
+          </div>
         )}
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-gray-300 group-hover:text-gray-100">
+        <div className="p-4">
+          {hostname && (
+            <p className="mb-1 text-xs font-medium uppercase tracking-wider text-gray-600">
+              {hostname}
+            </p>
+          )}
+          <p className="text-sm font-medium text-gray-300 group-hover:text-gray-100">
             {post.sourceTitle || post.localTitle || "Open original"}
           </p>
-          <p className="mt-0.5 truncate text-xs text-gray-600">
-            {post.canonicalUrl}
-          </p>
+          {post.sourceDescription && (
+            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-gray-500">
+              {post.sourceDescription}
+            </p>
+          )}
         </div>
-        <span className="flex-shrink-0 text-xs text-gray-600 group-hover:text-gray-400">
-          ↗
-        </span>
       </a>
     );
   }

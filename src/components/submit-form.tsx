@@ -3,6 +3,8 @@
 import { useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { Provider, ContentType, EmbedKind } from "@/lib/providers/types";
+import type { Post } from "@/lib/db/schema";
+import { ProviderEmbed } from "./provider-embed";
 
 interface ResolveResult {
   match: {
@@ -16,6 +18,7 @@ interface ResolveResult {
     title?: string;
     author?: string;
     thumbnailUrl?: string;
+    description?: string;
   };
 }
 
@@ -43,6 +46,13 @@ const PROVIDER_CONFIG: Record<
     bg: "bg-fuchsia-500/10",
     border: "border-fuchsia-500/20",
     icon: "◆",
+  },
+  generic: {
+    label: "Link",
+    color: "text-amber-400",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/20",
+    icon: "◎",
   },
 };
 
@@ -160,7 +170,7 @@ export function SubmitForm() {
             value={url}
             onChange={(e) => handleUrlChange(e.target.value)}
             onPaste={handlePaste}
-            placeholder="Paste a YouTube, TikTok, or Instagram URL..."
+            placeholder="Paste any URL..."
             className="w-full rounded-xl border border-gray-800 bg-gray-900/50 px-4 py-3.5 font-mono text-sm text-gray-200 placeholder-gray-600 outline-none transition-all focus:border-gray-600 focus:bg-gray-900 focus:ring-1 focus:ring-gray-700"
             autoFocus
           />
@@ -215,6 +225,11 @@ export function SubmitForm() {
                   {resolved.metadata.author}
                 </p>
               )}
+              {resolved.metadata.description && (
+                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-gray-500">
+                  {resolved.metadata.description}
+                </p>
+              )}
               {!resolved.metadata.title && (
                 <p className="truncate text-xs text-gray-500">
                   {resolved.match.canonicalUrl}
@@ -222,6 +237,40 @@ export function SubmitForm() {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Embed Preview */}
+      {resolved && (
+        <div className="overflow-hidden rounded-xl border border-gray-800/60">
+          <ProviderEmbed
+            post={{
+              id: 0,
+              provider: resolved.match.provider,
+              contentType: resolved.match.contentType,
+              originalUrl: resolved.match.canonicalUrl,
+              canonicalUrl: resolved.match.canonicalUrl,
+              externalId: resolved.match.externalId,
+              embedKind: resolved.match.embed.kind,
+              embedUrl: resolved.match.embed.url ?? null,
+              embedHtml: resolved.match.embed.html ?? null,
+              isEmbeddable: true,
+              localTitle: null,
+              localNote: null,
+              submittedByAlias: null,
+              sourceTitle: resolved.metadata.title ?? null,
+              sourceAuthor: resolved.metadata.author ?? null,
+              sourceDescription: resolved.metadata.description ?? null,
+              sourceThumbnailUrl: resolved.metadata.thumbnailUrl ?? null,
+              likeCount: 0,
+              dislikeCount: 0,
+              reactionCountsJson: "{}",
+              commentCount: 0,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            } satisfies Post}
+            lazy={false}
+          />
         </div>
       )}
 

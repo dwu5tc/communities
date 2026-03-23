@@ -1,7 +1,7 @@
 import { db } from "@/lib/db/client";
 import { posts, comments } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { FeedCard } from "@/components/feed-card";
+import { FeedToggle } from "@/components/feed-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ export default async function FeedPage() {
           Nothing here yet
         </h2>
         <p className="mb-6 text-sm text-gray-500">
-          Submit a link from YouTube, TikTok, or Instagram to get started.
+          Submit a link to get started.
         </p>
         <a
           href="/submit"
@@ -44,15 +44,5 @@ export default async function FeedPage() {
     })
   );
 
-  return (
-    <div className="space-y-4">
-      {postsWithComments.map(({ post, previewComments }) => (
-        <FeedCard
-          key={post.id}
-          post={post}
-          previewComments={previewComments}
-        />
-      ))}
-    </div>
-  );
+  return <FeedToggle postsWithComments={postsWithComments} />;
 }
