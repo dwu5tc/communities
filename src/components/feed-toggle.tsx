@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Masonry from "react-masonry-css";
 import type { Post, Comment } from "@/lib/db/schema";
 import { FeedCard } from "./feed-card";
 import { FeedTile } from "./feed-tile";
@@ -8,6 +9,12 @@ import { FeedTile } from "./feed-tile";
 interface FeedToggleProps {
   postsWithComments: { post: Post; previewComments: Comment[] }[];
 }
+
+const MASONRY_BREAKPOINTS = {
+  default: 3,
+  1024: 2,
+  640: 1,
+};
 
 export function FeedToggle({ postsWithComments }: FeedToggleProps) {
   const [view, setView] = useState<"list" | "grid">(() => {
@@ -73,13 +80,17 @@ export function FeedToggle({ postsWithComments }: FeedToggleProps) {
         </div>
       )}
 
-      {/* Grid View */}
+      {/* Grid View — Masonry */}
       {view === "grid" && (
-        <div className="mx-auto max-w-6xl grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Masonry
+          breakpointCols={MASONRY_BREAKPOINTS}
+          className="masonry-grid mx-auto max-w-6xl"
+          columnClassName="masonry-grid-column"
+        >
           {postsWithComments.map(({ post, previewComments }) => (
             <FeedTile key={post.id} post={post} previewComments={previewComments} />
           ))}
-        </div>
+        </Masonry>
       )}
     </div>
   );

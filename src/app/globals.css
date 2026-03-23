@@ -7,3 +7,16 @@
     @apply bg-gray-950 text-gray-100 antialiased;
   }
 }
+
+.masonry-grid {
+  display: flex;
+  width: auto;
+  gap: 16px;
+}
+
+.masonry-grid-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-clip: padding-box;
+}
