@@ -2,11 +2,12 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const posts = sqliteTable("posts", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  provider: text("provider").notNull(), // youtube | tiktok | instagram
-  contentType: text("content_type").notNull(), // video | reel | post | short
+  provider: text("provider").notNull(), // youtube | tiktok | instagram | generic
+  contentType: text("content_type").notNull(), // video | reel | post | short | article
   originalUrl: text("original_url").notNull(),
   canonicalUrl: text("canonical_url").notNull(),
   externalId: text("external_id").notNull(),
+  normalizedUrl: text("normalized_url"),
   localTitle: text("local_title"),
   localNote: text("local_note"),
   submittedByAlias: text("submitted_by_alias"),
@@ -29,8 +30,15 @@ export const posts = sqliteTable("posts", {
 export const comments = sqliteTable("comments", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   postId: integer("post_id").notNull().references(() => posts.id),
+  parentId: integer("parent_id"),
   displayName: text("display_name").notNull().default("anon"),
   body: text("body").notNull(),
+  anchorSelector: text("anchor_selector"),
+  anchorOffset: integer("anchor_offset"),
+  anchorLength: integer("anchor_length"),
+  anchorText: text("anchor_text"),
+  anchorContextBefore: text("anchor_context_before"),
+  anchorContextAfter: text("anchor_context_after"),
   likeCount: integer("like_count").notNull().default(0),
   dislikeCount: integer("dislike_count").notNull().default(0),
   reactionCountsJson: text("reaction_counts_json").notNull().default("{}"),

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Communities</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="header">
+        <h1>Communities</h1>
+        <span id="page-title" class="page-title"></span>
+      </header>
+
+      <div id="loading" class="loading">Loading...</div>
+      <div id="error" class="error" hidden></div>
+
+      <div id="main-content" hidden>
+        <div class="tabs">
+          <button class="tab active" data-tab="page">
+            Page Comments <span id="page-count" class="count">0</span>
+          </button>
+          <button class="tab" data-tab="discussion">
+            Discussion <span id="discussion-count" class="count">0</span>
+          </button>
+        </div>
+
+        <div id="anchor-preview" class="anchor-preview" hidden>
+          <div class="anchor-quote">&ldquo;<span id="anchor-text"></span>&rdquo;</div>
+          <button id="clear-anchor" class="clear-anchor">&times;</button>
+        </div>
+
+        <div id="comment-form-container" class="comment-form-container">
+          <form id="comment-form" class="comment-form">
+            <input
+              type="text"
+              id="comment-body"
+              placeholder="Add a comment..."
+              maxlength="2000"
+              autocomplete="off"
+            />
+            <button type="submit" id="submit-btn">Post</button>
+          </form>
+        </div>
+
+        <div id="comments-container" class="comments-container"></div>
+      </div>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

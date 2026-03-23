@@ -3,6 +3,7 @@ import { db } from "@/lib/db/client";
 import { posts } from "@/lib/db/schema";
 import { detectProvider, getProviderModule } from "@/lib/providers/detect-provider";
 import { submitPostSchema } from "@/lib/validation/posts";
+import { normalizeUrl } from "@/lib/utils/normalize-url";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
         sourceAuthor: metadata?.author || null,
         sourceDescription: metadata?.description || null,
         sourceThumbnailUrl: metadata?.thumbnailUrl || null,
+        normalizedUrl: normalizeUrl(match.canonicalUrl),
         embedKind: match.embed.kind,
         embedUrl: match.embed.url || null,
         embedHtml: match.embed.html || null,

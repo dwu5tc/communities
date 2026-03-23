@@ -7,8 +7,7 @@ import { PostMeta } from "@/components/post-meta";
 import { ProviderEmbed } from "@/components/provider-embed";
 import { ReactionBar } from "@/components/reaction-bar";
 import { LikeDislikeBar } from "@/components/like-dislike-bar";
-import { CommentList } from "@/components/comment-list";
-import { CommentForm } from "@/components/comment-form";
+import { CommentTabs } from "@/components/comment-tabs";
 import { relativeTime } from "@/lib/utils/dates";
 
 export const dynamic = "force-dynamic";
@@ -32,6 +31,9 @@ export default async function PostDetailPage({
     .orderBy(asc(comments.createdAt));
 
   const title = post.localTitle || post.sourceTitle;
+
+  const pageComments = allComments.filter((c) => c.anchorText);
+  const discussionComments = allComments.filter((c) => !c.anchorText);
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 py-4">
@@ -90,18 +92,11 @@ export default async function PostDetailPage({
 
       {/* Comments section */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-sm font-medium text-gray-300">Comments</h2>
-          {post.commentCount > 0 && (
-            <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs text-gray-500">
-              {post.commentCount}
-            </span>
-          )}
-        </div>
-
-        <CommentForm postId={post.id} />
-
-        <CommentList comments={allComments} />
+        <CommentTabs
+          postId={post.id}
+          pageComments={pageComments}
+          discussionComments={discussionComments}
+        />
       </div>
     </div>
   );

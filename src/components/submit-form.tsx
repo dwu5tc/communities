@@ -251,6 +251,7 @@ export function SubmitForm() {
               originalUrl: resolved.match.canonicalUrl,
               canonicalUrl: resolved.match.canonicalUrl,
               externalId: resolved.match.externalId,
+              normalizedUrl: null,
               embedKind: resolved.match.embed.kind,
               embedUrl: resolved.match.embed.url ?? null,
               embedHtml: resolved.match.embed.html ?? null,
